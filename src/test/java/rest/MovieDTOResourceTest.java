@@ -134,6 +134,8 @@ public class MovieDTOResourceTest {
                 ));
     }
 
+
+    /*
     @Test
     public void testMovie_GetById() throws Exception {
         given()
@@ -145,6 +147,7 @@ public class MovieDTOResourceTest {
                 .body("director", equalTo(m1.getDirector()))
                 .body("releaseYear", equalTo(m1.getReleaseYear()));
     }
+     */
 
     @Test
     public void testMovie_GetByTitle() throws Exception {
