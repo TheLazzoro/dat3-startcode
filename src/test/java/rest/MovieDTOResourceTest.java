@@ -133,11 +133,9 @@ public class MovieDTOResourceTest {
 
     @Test
     public void testMovie_GetById() throws Exception {
-        long id = 1;
-
         given()
                 .contentType(MediaType.APPLICATION_JSON)
-                .get("/movie/" + id).then()
+                .get("/movie/{id}", m1.getId()).then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("title", equalTo("Titanic"));
