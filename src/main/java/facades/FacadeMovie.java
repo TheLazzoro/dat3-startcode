@@ -59,8 +59,8 @@ public class FacadeMovie {
 
         try {
             entities.Movie movEntity = em.find(entities.Movie.class, id);
-            //if (movEntity == null)
-            //    throw new MovieNotFoundException("The Movie entity with ID: " + id + " Was not found");
+            if (movEntity == null)
+                throw new MovieNotFoundException("ID: " + id + " Movie entity was not found");
             return new MovieDTO(movEntity);
         } finally {
             em.close();
