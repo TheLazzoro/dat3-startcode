@@ -138,7 +138,9 @@ public class MovieDTOResourceTest {
                 .get("/movie/{id}", m1.getId()).then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("title", equalTo("Titanic"));
+                .body("title", equalTo(m1.getTitle()))
+                .body("director", equalTo(m1.getDirector()))
+                .body("releaseYear", equalTo(m1.getReleaseYear()));
     }
 
     @Test
