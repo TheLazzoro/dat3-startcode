@@ -67,13 +67,16 @@ public class MovieDTOResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        m1 = new Movie("Titanic", "Christopher Nolan", 1997);
-        m2 = new Movie("The Dark Knight", "Christopher Nolan", 2008);
-        m3 = new Movie("The Lord of the Rings: The Fellowship of the Ring", "Peter Jackson", 2001);
+
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
             em.getTransaction().commit();
+
+            m1 = new Movie("Titanic", "Christopher Nolan", 1997);
+            m2 = new Movie("The Dark Knight", "Christopher Nolan", 2008);
+            m3 = new Movie("The Lord of the Rings: The Fellowship of the Ring", "Peter Jackson", 2001);
+
             em.getTransaction().begin();
             em.persist(m1);
             em.getTransaction().commit();
