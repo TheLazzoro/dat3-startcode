@@ -2,6 +2,7 @@ package facades;
 
 import dtos.MovieDTO;
 import entities.Movie;
+import errorhandling.MovieNotFoundException;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
@@ -81,8 +82,8 @@ public class FacadeMovieTest {
     }
 
     @Test
-    public void FacadeMovie_GetById() {
-        MovieDTO movie = facade.getById(2);
+    public void FacadeMovie_GetById() throws MovieNotFoundException {
+        MovieDTO movie = facade.getById(2l);
 
         assertEquals("The Dark Knight", movie.getTitle());
         assertEquals("Christopher Nolan", movie.getDirector());
@@ -90,7 +91,7 @@ public class FacadeMovieTest {
     }
 
     @Test
-    public void FacadeMovie_GetByTitle() {
+    public void FacadeMovie_GetByTitle() throws MovieNotFoundException {
         MovieDTO movie = facade.getByTitle("Titanic");
 
         assertEquals("Titanic", movie.getTitle());

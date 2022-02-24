@@ -1,6 +1,7 @@
 package rest;
 
 import entities.Movie;
+import errorhandling.MovieNotFoundException;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -68,12 +69,18 @@ public class MovieDTOResourceTest {
         EntityManager em = emf.createEntityManager();
         m1 = new Movie("Titanic", "Christopher Nolan", 1997);
         m2 = new Movie("The Dark Knight", "Christopher Nolan", 2008);
-        m3 = new Movie("The Lord of the Rings: The Fellowship of the Ring", "Peter Jackson ", 2001);
+        m3 = new Movie("The Lord of the Rings: The Fellowship of the Ring", "Peter Jackson", 2001);
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
+            em.getTransaction().commit();
+            em.getTransaction().begin();
             em.persist(m1);
+            em.getTransaction().commit();
+            em.getTransaction().begin();
             em.persist(m2);
+            em.getTransaction().commit();
+            em.getTransaction().begin();
             em.persist(m3);
             em.getTransaction().commit();
         } finally {
@@ -103,7 +110,7 @@ public class MovieDTOResourceTest {
     @Test
     public void testMovie_Count() throws Exception {
         given()
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON)
                 .get("/movie/count").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
@@ -126,9 +133,23 @@ public class MovieDTOResourceTest {
 
     @Test
     public void testMovie_GetById() throws Exception {
+        long id = 1;
+
         given()
                 .contentType(MediaType.APPLICATION_JSON)
-                .get("/movie/1").then()
+                .get("/movie/" + id).then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("title", equalTo("Titanic"));
+    }
+
+    @Test
+    public void testMovie_GetByTitle() throws Exception {
+        String title = "Titanic";
+
+        given()
+                .contentType(MediaType.APPLICATION_JSON)
+                .get("/movie/title/" + title).then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("title", equalTo("Titanic"));

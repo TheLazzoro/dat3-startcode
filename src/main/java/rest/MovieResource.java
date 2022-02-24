@@ -3,6 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.MovieDTO;
+import errorhandling.MovieNotFoundException;
 import utils.EMF_Creator;
 import facades.FacadeMovie;
 import javax.persistence.EntityManagerFactory;
@@ -29,7 +30,7 @@ public class MovieResource {
         return "{\"msg\":\"Hello World\"}";
     }
 
-    @Path("count")
+    @Path("/count")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getMovieCount() {
@@ -39,7 +40,7 @@ public class MovieResource {
         return "{\"count\":"+count+"}";  //Done manually so no need for a DTO
     }
 
-    @Path("all")
+    @Path("/all")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMoviesAll() {
@@ -51,11 +52,27 @@ public class MovieResource {
                 .build();
     }
 
-    @Path("{id}")
+    @Path("/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMovieById(@PathParam("id") long id) {
+    public Response getMovieById(@PathParam("id") long id) throws MovieNotFoundException {
         MovieDTO movie = FACADE.getById(id);
+
+        System.out.println("Title: " + movie.getTitle());
+        System.out.println("Director: " + movie.getDirector());
+        System.out.println("Release year: " + movie.getReleaseYear());
+
+        return Response
+                .ok()
+                .entity(GSON.toJson(movie))
+                .build();
+    }
+
+    @Path("title/{title}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMovieByTitle(@PathParam("title") String title) throws MovieNotFoundException {
+        MovieDTO movie = FACADE.getByTitle(title);
 
         return Response
                 .ok()
