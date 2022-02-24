@@ -52,6 +52,7 @@ public class MovieResource {
                 .build();
     }
 
+    /*
     @Path("/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -67,6 +68,7 @@ public class MovieResource {
                 .entity(GSON.toJson(movie))
                 .build();
     }
+     */
 
     @Path("title/{title}")
     @GET

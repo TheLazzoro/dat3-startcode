@@ -54,6 +54,7 @@ public class FacadeMovie {
         return new MovieDTO(movEntity);
     }
 
+    /*
     public MovieDTO getById(long id) throws MovieNotFoundException {
         EntityManager em = emf.createEntityManager();
 
@@ -66,6 +67,7 @@ public class FacadeMovie {
             em.close();
         }
     }
+     */
 
     //TODO Remove/Change this before use
     public long getMovieCount() {

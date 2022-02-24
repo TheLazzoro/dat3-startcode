@@ -81,6 +81,7 @@ public class FacadeMovieTest {
         assertEquals(3, movies.size());
     }
 
+    /*
     @Test
     public void FacadeMovie_GetById() throws MovieNotFoundException {
         MovieDTO movie = facade.getById(2);
@@ -89,6 +90,7 @@ public class FacadeMovieTest {
         assertEquals("Christopher Nolan", movie.getDirector());
         assertEquals(2008, movie.getReleaseYear());
     }
+     */
 
     @Test
     public void FacadeMovie_GetByTitle() throws MovieNotFoundException {
