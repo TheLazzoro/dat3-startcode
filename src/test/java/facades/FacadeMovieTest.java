@@ -83,7 +83,7 @@ public class FacadeMovieTest {
 
     @Test
     public void FacadeMovie_GetById() throws MovieNotFoundException {
-        MovieDTO movie = facade.getById(2l);
+        MovieDTO movie = facade.getById(2);
 
         assertEquals("The Dark Knight", movie.getTitle());
         assertEquals("Christopher Nolan", movie.getDirector());

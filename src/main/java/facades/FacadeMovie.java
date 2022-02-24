@@ -54,13 +54,13 @@ public class FacadeMovie {
         return new MovieDTO(movEntity);
     }
 
-    public MovieDTO getById(Long id) throws MovieNotFoundException {
+    public MovieDTO getById(long id) throws MovieNotFoundException {
         EntityManager em = emf.createEntityManager();
 
         try {
             entities.Movie movEntity = em.find(entities.Movie.class, id);
-            if (movEntity == null)
-                throw new MovieNotFoundException("The Movie entity with ID: " + id + " Was not found");
+            //if (movEntity == null)
+            //    throw new MovieNotFoundException("The Movie entity with ID: " + id + " Was not found");
             return new MovieDTO(movEntity);
         } finally {
             em.close();
