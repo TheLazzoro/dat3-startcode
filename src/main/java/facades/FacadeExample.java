@@ -1,11 +1,20 @@
 package facades;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import dtos.ChuckNorrisDTO;
 import dtos.RenameMeDTO;
 import entities.RenameMe;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
+import java.util.Scanner;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.core.MediaType;
 
 //import errorhandling.RenameMeNotFoundException;
 import utils.EMF_Creator;
@@ -16,8 +25,11 @@ import utils.EMF_Creator;
  */
 public class FacadeExample {
 
+    private static final String CHUCK_URL = "https://api.chucknorris.io/jokes/random";
+    private static final String DAD_URL = "https://icanhazdadjoke.com";
     private static FacadeExample instance;
     private static EntityManagerFactory emf;
+    private static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     
     //Private Constructor to ensure Singleton
     private FacadeExample() {}
@@ -36,52 +48,38 @@ public class FacadeExample {
         return instance;
     }
 
-    private EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
-    
-    public RenameMeDTO create(RenameMeDTO rm){
-        RenameMe rme = new RenameMe(rm.getDummyStr1(), rm.getDummyStr2());
-        EntityManager em = getEntityManager();
+    public String readJoke(String url_string) {
+        String jsonStr = "";
         try {
-            em.getTransaction().begin();
-            em.persist(rme);
-            em.getTransaction().commit();
-        } finally {
-            em.close();
+            URL url = new URL(url_string);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Accept", MediaType.APPLICATION_JSON);
+            con.setRequestProperty("User-Agent", "MyApp");
+            try (Scanner scan = new Scanner(con.getInputStream())) {
+                while (scan.hasNext()) {
+                    jsonStr += scan.nextLine();
+                }
+            }
+        } catch (IOException ioex) {
+            System.out.println("Error: " + ioex.getMessage());
         }
-        return new RenameMeDTO(rme);
-    }
-    public RenameMeDTO getById(long id) { //throws RenameMeNotFoundException {
-        EntityManager em = emf.createEntityManager();
-        RenameMe rm = em.find(RenameMe.class, id);
-//        if (rm == null)
-//            throw new RenameMeNotFoundException("The RenameMe entity with ID: "+id+" Was not found");
-        return new RenameMeDTO(rm);
-    }
-    
-    //TODO Remove/Change this before use
-    public long getRenameMeCount(){
-        EntityManager em = getEntityManager();
-        try{
-            long renameMeCount = (long)em.createQuery("SELECT COUNT(r) FROM RenameMe r").getSingleResult();
-            return renameMeCount;
-        }finally{  
-            em.close();
-        }
-    }
-    
-    public List<RenameMeDTO> getAll(){
-        EntityManager em = emf.createEntityManager();
-        TypedQuery<RenameMe> query = em.createQuery("SELECT r FROM RenameMe r", RenameMe.class);
-        List<RenameMe> rms = query.getResultList();
-        return RenameMeDTO.getDtos(rms);
-    }
-    
-    public static void main(String[] args) {
-        emf = EMF_Creator.createEntityManagerFactory();
-        FacadeExample fe = getFacadeExample(emf);
-        fe.getAll().forEach(dto->System.out.println(dto));
+        return jsonStr;
     }
 
+
+
+    public ChuckNorrisDTO getChuckJoke() {
+        ChuckNorrisDTO chuck = GSON.fromJson(readJoke(CHUCK_URL), ChuckNorrisDTO.class);
+        return chuck;
+    }
+
+    public static void main(String[] args) {
+        FacadeExample facadeExample = getFacadeExample(EMF_Creator.createEntityManagerFactory());
+
+        String output = facadeExample.readJoke(CHUCK_URL);
+        System.out.println(output);
+        ChuckNorrisDTO chuck = facadeExample.getChuckJoke();
+        System.out.println(chuck.getValue());
+    }
 }
