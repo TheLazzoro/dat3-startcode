@@ -1,5 +1,7 @@
 package rest;
 
+import errorhandling.MovieNotFoundExceptionMapper;
+
 import java.util.Set;
 import javax.ws.rs.core.Application;
 
@@ -21,8 +23,9 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(errorhandling.GenericExceptionMapper.class);
+        resources.add(MovieNotFoundExceptionMapper.class);
         resources.add(org.glassfish.jersey.server.wadl.internal.WadlResource.class);
-        resources.add(rest.RenameMeResource.class);
+        resources.add(MovieResource.class);
     }
     
 }
