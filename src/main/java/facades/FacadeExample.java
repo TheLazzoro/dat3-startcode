@@ -3,8 +3,6 @@ package facades;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.ChuckNorrisDTO;
-import dtos.RenameMeDTO;
-import entities.RenameMe;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

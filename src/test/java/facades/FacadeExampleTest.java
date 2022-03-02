@@ -1,7 +1,6 @@
 package facades;
 
 import utils.EMF_Creator;
-import entities.RenameMe;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
@@ -37,6 +36,7 @@ public class FacadeExampleTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
+        /*
         try {
             em.getTransaction().begin();
             em.createNamedQuery("RenameMe.deleteAllRows").executeUpdate();
@@ -47,6 +47,7 @@ public class FacadeExampleTest {
         } finally {
             em.close();
         }
+         */
     }
 
     @AfterEach
